@@ -10,7 +10,7 @@ const TimeLineWrapper = styled.div`
     width: 100%;
     overflow: hidden;
     display: flex;
-    height: 500px;
+    height: 300px;
     position: relative;
   }
   .line {
@@ -19,7 +19,7 @@ const TimeLineWrapper = styled.div`
     border-radius: 3px;
     background-color: black;
     position: absolute;
-    bottom: 6px;
+    bottom: 20px;
     left: 0;
     z-index: 9;
   }
@@ -29,14 +29,15 @@ const DotWrapper = styled.div`
   width: 16px;
   height: 16px;
   ${(props) => props.active && `box-shadow: 0 2px 12px 0 rgb(0 0 0 / 70%);`};
-  background-color: black;
+  background-color: ${(props) => (props.active ? 'red' : 'black')};
   border-radius: 50%;
   position: absolute;
-  bottom: 0;
+  bottom: 14px;
   left: ${(props) => props.left};
   z-index: 10;
   cursor: pointer;
   transform: scale(${(props) => (props.active ? 2 : 1)});
+  color:${(props) => (props.active ? 'red' : 'black')};
   transition: all 0.3s;
   .dotTime {
     position: absolute;
@@ -68,7 +69,7 @@ const PicWrapper = styled.div`
 const minWidth = 100;
 const maxWidth = 400;
 
-function TimeLine({ data }) {
+function TimeLine({ data, title }) {
   const [activeIndex, setActiveIndex] = useState(-1);
   const clientWidth = document.body.clientWidth;
   console.log(clientWidth);
@@ -91,12 +92,11 @@ function TimeLine({ data }) {
   };
 
   const calcDotLeft = (index) => {
-    return `calc(calc(calc(100% - 140px) * ${
-      index / (data.length - 1)
-    }) + 70px)`;
+    return `calc(calc(calc(100% - 140px) * ${index / (data.length - 1)
+      }) + 70px)`;
   };
   return (
-    <TimeLineWrapper>
+    <TimeLineWrapper onMouseLeave={() => setActiveIndex(-1)}>
       <div className="picSwipe">
         {data.map((d, i) => (
           <Pic
@@ -118,6 +118,7 @@ function TimeLine({ data }) {
           <div className="dotTime">{d.time}</div>
         </Dot>
       ))}
+      <h3>{title}</h3>
     </TimeLineWrapper>
   );
 }
